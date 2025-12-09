@@ -1,0 +1,342 @@
+:root {
+    /* Day Mode (Default) - Pastel & Clean */
+    --bg-color: #f0f4f8;
+    --text-color: #2d3436;
+    --glass-bg: rgba(255, 255, 255, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.9);
+    --btn-bg: rgba(255, 255, 255, 0.7);
+    --btn-hover: rgba(255, 255, 255, 0.95);
+    --btn-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    --operator-color: #ff7675;
+    --equals-bg: linear-gradient(135deg, #74b9ff, #0984e3);
+    --equals-shadow: 0 4px 15px rgba(9, 132, 227, 0.4);
+    --screen-text-sub: #636e72;
+    --blob-1: #55efc4;
+    --blob-2: #81ecec;
+    --blob-3: #a29bfe;
+}
+
+body.night-mode {
+    /* Night Mode - Neon & Cyberpunk */
+    --bg-color: #0f1016; /* Very dark blue-ish grey */
+    --text-color: #dfe6e9;
+    --glass-bg: rgba(25, 30, 40, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --btn-bg: rgba(35, 40, 50, 0.7);
+    --btn-hover: rgba(60, 65, 80, 0.9);
+    --btn-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    --operator-color: #ff007f; /* Neon Pink */
+    --equals-bg: linear-gradient(135deg, #00d2ff, #3a7bd5);
+    --equals-shadow: 0 0 20px rgba(0, 210, 255, 0.6);
+    --screen-text-sub: #b2bec3;
+    --blob-1: #ff007f;
+    --blob-2: #7d5fff;
+    --blob-3: #00d2ff;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Outfit', sans-serif;
+    transition: background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease, transform 0.2s ease;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+    user-select: none; /* Prevent text selection on double clicks */
+}
+
+/* Background Animated Blobs */
+.background-blobs {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px); /* Massive blur for soft ambient light */
+    opacity: 0.6;
+    animation: moveBlobs 20s infinite alternate;
+}
+
+.blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: var(--blob-1); animation-duration: 25s; }
+.blob-2 { bottom: -10%; right: -10%; width: 400px; height: 400px; background: var(--blob-2); animation-duration: 22s; animation-direction: alternate-reverse; }
+.blob-3 { top: 40%; left: 40%; width: 300px; height: 300px; background: var(--blob-3); animation-duration: 28s; }
+
+@keyframes moveBlobs {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(100px, 50px) scale(1.1); }
+}
+
+/* Theme Toggle Switch */
+.theme-switch-wrapper {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+}
+
+.theme-switch {
+    display: inline-block;
+    height: 34px;
+    position: relative;
+    width: 60px;
+}
+
+.theme-switch input {
+    display: none;
+}
+
+.slider {
+    background-color: var(--glass-bg);
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+    border-radius: 34px;
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.slider:before {
+    background-color: var(--operator-color);
+    bottom: 4px;
+    content: "";
+    height: 26px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 26px;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.sun-icon, .moon-icon {
+    font-size: 18px;
+    color: var(--text-color);
+    z-index: 1;
+}
+
+/* Calculator Container */
+.calculator-container {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 30px;
+    padding: 20px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transform: translateY(0);
+    animation: floatContainer 6s ease-in-out infinite;
+}
+
+@keyframes floatContainer {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Screen */
+.calculator-screen {
+    background: rgba(0,0,0,0.03);
+    border-radius: 20px;
+    padding: 20px;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    min-height: 120px;
+    word-wrap: break-word;
+    word-break: break-all;
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
+}
+
+body.night-mode .calculator-screen {
+    background: rgba(0,0,0,0.2);
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.previous-operand {
+    color: var(--screen-text-sub);
+    font-size: 1.2rem;
+    min-height: 1.5rem;
+}
+
+.current-operand {
+    color: var(--text-color);
+    font-size: 3rem;
+    font-weight: 700;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: none; /* Instant update for typing */
+}
+
+body.night-mode .current-operand {
+    text-shadow: 0 0 10px var(--text-color);
+}
+
+/* Grid */
+.calculator-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 15px;
+}
+
+/* Buttons */
+.btn {
+    appearance: none;
+    border: none;
+    outline: none;
+    background: var(--btn-bg);
+    color: var(--text-color);
+    font-size: 1.5rem;
+    font-weight: 600;
+    border-radius: 20px;
+    cursor: pointer;
+    height: 70px;
+    box-shadow: var(--btn-shadow);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn:hover {
+    background: var(--btn-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+body.night-mode .btn:hover {
+    box-shadow: 0 0 15px rgba(255,255,255,0.2);
+}
+
+.btn:active {
+    transform: scale(0.95);
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.span-two {
+    grid-column: span 2;
+}
+
+.action-btn {
+    color: var(--operator-color);
+    font-weight: 700;
+}
+
+.operator-btn {
+    color: var(--operator-color);
+    font-size: 1.8rem;
+}
+
+.equals-btn {
+    background: var(--equals-bg);
+    color: #fff;
+    box-shadow: var(--equals-shadow);
+    border: none;
+}
+
+.equals-btn:hover {
+    background: var(--equals-bg);
+    filter: brightness(1.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+body.night-mode .equals-btn {
+    text-shadow: 0 0 5px #fff;
+    box-shadow: 0 0 25px var(--blob-3);
+}
+
+/* Button Ripple Effect */
+.btn::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    transition: width 0.4s ease-out, height 0.4s ease-out;
+}
+
+.btn.active-ripple::after {
+    width: 200px;
+    height: 200px;
+    opacity: 0;
+}
+
+/* Mobile Responsive */
+@media (max-width: 450px) {
+    .calculator-container {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+        justify-content: flex-end;
+        padding-bottom: 40px;
+        box-shadow: none;
+        backdrop-filter: none; /* Performance on mobile */
+        background: var(--bg-color); /* Fallback */
+    }
+    
+    /* Re-add glass just for grid container if needed or keep full screen */
+    .calculator-container {
+        border: none;
+        background: transparent;
+    }
+
+    .calculator-grid {
+        grid-gap: 12px;
+    }
+    
+    .btn {
+        height: 65px;
+        font-size: 1.4rem;
+        border-radius: 18px;
+    }
+
+    .calculator-screen {
+        margin-bottom: auto;
+        margin-top: 60px; /* Space for theme toggle */
+        background: transparent;
+        box-shadow: none;
+        align-items: flex-end;
+        padding-right: 10px;
+    }
+
+    .current-operand {
+        font-size: 4rem;
+    }
+}
