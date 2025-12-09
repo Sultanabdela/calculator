@@ -39,7 +39,7 @@ class Calculator {
             case '+':
                 computation = prev + current;
                 break;
-            case '−': // Using the specific minus character from HTML
+            case '−': 
             case '-':
                 computation = prev - current;
                 break;
@@ -91,7 +91,7 @@ class Calculator {
             this.previousOperandTextElement.innerText = '';
         }
 
-        // Add subtle pop animation to text on update
+        
         this.currentOperandTextElement.animate([
             { transform: 'scale(1.05)', opacity: 0.8 },
             { transform: 'scale(1)', opacity: 1 }
@@ -102,7 +102,7 @@ class Calculator {
     }
 }
 
-// Select DOM Elements
+
 const numberButtons = document.querySelectorAll('[data-number]');
 const operationButtons = document.querySelectorAll('[data-operation]');
 const equalsButton = document.querySelector('[data-equals]');
@@ -113,10 +113,8 @@ const currentOperandTextElement = document.querySelector('[data-current-operand]
 const themeToggle = document.getElementById('checkbox');
 const body = document.body;
 
-// Initialize Calculator
 const calculator = new Calculator(previousOperandTextElement, currentOperandTextElement);
 
-// Theme Toggle Logic
 themeToggle.addEventListener('change', () => {
     if (themeToggle.checked) {
         body.classList.remove('day-mode');
@@ -127,7 +125,7 @@ themeToggle.addEventListener('change', () => {
     }
 });
 
-// Event Listeners for Click
+
 numberButtons.forEach(button => {
     button.addEventListener('click', () => {
         calculator.appendNumber(button.innerText);
@@ -147,7 +145,7 @@ operationButtons.forEach(button => {
 equalsButton.addEventListener('click', button => {
     calculator.compute();
     calculator.updateDisplay();
-    // Special effect for equals
+    
     createRipple(equalsButton);
     confettiEffect();
 });
@@ -164,7 +162,6 @@ deleteButton.addEventListener('click', () => {
     createRipple(deleteButton);
 });
 
-// Keyboard Support
 document.addEventListener('keydown', e => {
     if ((e.key >= 0 && e.key <= 9) || e.key === '.') {
         calculator.appendNumber(e.key);
@@ -193,8 +190,7 @@ document.addEventListener('keydown', e => {
         if (op === '*') op = '×';
         if (op === '-') op = '−';
 
-        // Handle logic directly for standard symbols if needed, but we pass the key
-        // We need to match the button texts for chooseOperation
+       
         if (e.key === '/') calculator.chooseOperation('÷');
         else if (e.key === '*') calculator.chooseOperation('×');
         else if (e.key === '-') calculator.chooseOperation('−');
@@ -205,19 +201,17 @@ document.addEventListener('keydown', e => {
     }
 });
 
-// Ripple Effect Function
-function createRipple(button) {
-    // We're using CSS active state for main animation, 
-    // but we can add JS based particle or advanced ripples if desired.
-    // For now, let's rely on the CSS ::after pseudo-element + class
 
-    // Removing and re-adding class to trigger animation
+function createRipple(button) {
+   
+
+  
     button.classList.remove('active-ripple');
-    void button.offsetWidth; // Trigger reflow
+    void button.offsetWidth; 
     button.classList.add('active-ripple');
 }
 
-// Highlight button on keypress (Visual Feedback)
+
 function highlightButton(key) {
     let btn;
     if (key === 'delete') {
@@ -227,14 +221,14 @@ function highlightButton(key) {
     } else if (key === '=') {
         btn = equalsButton;
     } else {
-        // Find button by text
+        
         const allBtns = [...numberButtons, ...operationButtons];
         btn = allBtns.find(b => b.innerText === key);
     }
 
     if (btn) {
         btn.classList.add('active-ripple');
-        // Simulate hover/active
+      
         btn.style.transform = "scale(0.95)";
         setTimeout(() => {
             btn.classList.remove('active-ripple');
@@ -243,7 +237,7 @@ function highlightButton(key) {
     }
 }
 
-// Simple Logic for "Confetti" or Glow Flash on Equals (Optional enhancement)
+
 function confettiEffect() {
     const screen = document.querySelector('.calculator-screen');
     screen.style.boxShadow = "inset 0 0 30px var(--blob-1)";
@@ -251,3 +245,4 @@ function confettiEffect() {
         screen.style.boxShadow = "";
     }, 300);
 }
+
